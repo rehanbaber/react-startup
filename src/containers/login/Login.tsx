@@ -5,8 +5,9 @@ import { AuthContext } from '../auth/AuthContext';
 import { LOGIN } from '../../constants';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import Spinner from '../../components/Spinner/Spinner';
+import { toast } from 'react-toastify';
 
-export interface LoginFormInterface { 
+export interface LoginFormInterface {
     email: string;
     password: string;
 }
@@ -23,24 +24,23 @@ const LoginContainer: React.FC<RouteComponentProps> = ({ history }) => {
     const onLogin = (values: LoginFormInterface) => {
         setLoading(true);
         axios.post(LOGIN, values).then((response) => {
-            console.log('response', response)
             authContext.authenticateUser(response.data);
-            history.push('/');
+            toast.success('Login successful');
         }).catch((error) => {
-            console.log('form error', error);
+            toast.error(error.message);
             setLoading(false);
             setFormState(values);
         })
     }
 
     useEffect(() => {
-        if(authContext.checkAuthentication()) {
+        if (authContext.checkAuthentication()) {
             history.push('/');
         }
     })
 
     return (
-        isLoading? <Spinner lightBg={true}></Spinner> :
+        isLoading ? <Spinner lightBg={true}></Spinner> :
             <LoginForm onLogin={onLogin} currentFormState={formState}></LoginForm>
     );
 }

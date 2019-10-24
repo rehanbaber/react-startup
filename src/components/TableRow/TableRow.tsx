@@ -17,7 +17,7 @@ const TableRow: React.FunctionComponent<TableRowProps> = ({rowValues}) => {
             {
                 rowValues.map((row, index) => (
                     row.type === 'string' ? <td key={index}>{row.value}</td>:
-                                            <td><Button variant="primary" onClick={row.onClick}>{row.value}</Button></td>
+                                            <td key={index}><Button variant="primary" onClick={row.onClick}>{row.value}</Button></td>
                 ))
             }
         </tr>

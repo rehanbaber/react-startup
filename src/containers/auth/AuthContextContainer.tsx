@@ -25,17 +25,16 @@ const AuthContextContainer: React.FunctionComponent<RouteComponentProps> = ({ hi
     }
 
     const logoutUser: () => void = (): void => {
+        localStorage.removeItem(TOKEN);
         setState(prev => {
             return {
                 ...prev,
                 isAuthenticated: false,
             }
         })
-        history.push('/login');
     }
 
     const checkAuthentication: () => boolean = (): boolean => {
-        console.log(!!localStorage.getItem(TOKEN))
         return !!localStorage.getItem(TOKEN);
     }
 

@@ -4,7 +4,8 @@ import { User } from "../../models/user.model";
 import UsersList from '../../components/UsersList/UsersList';
 import axios from '../../axios/axios';
 import Spinner from '../../components/Spinner/Spinner';
-import { USERS } from '../../constants';
+import { USERS, ROUTE_ERROR, ROUTE_ADD_EDIT_USER } from '../../constants';
+import { toast } from 'react-toastify';
 
 const UsersContainer: React.FunctionComponent<RouteComponentProps> = ({history}) => {
     const [users, setUsers] = useState<User[]>([]);
@@ -15,16 +16,24 @@ const UsersContainer: React.FunctionComponent<RouteComponentProps> = ({history})
             .then( response => {
                 setLoading(false);
                 setUsers(response.data);
+                toast.success('Users fetched successfully');
             })
-    }, [])
+            .catch((error) => {
+                toast.error(error.message);
+            })
+    }, [history])
 
     const onEditClick = useCallback((id: string) => {
-        history.push('/edituser/' + id);
+        history.push(`${ROUTE_ADD_EDIT_USER}/${id}`);
     }, [history])
 
     return (
         isLoading ? <Spinner lightBg={true}></Spinner> :
-        <UsersList onEditClick={onEditClick} users={users}></UsersList>
+        (
+            <React.Fragment>
+                <UsersList onEditClick={onEditClick} users={users}></UsersList>
+            </React.Fragment>
+        )
     );
 }
 
